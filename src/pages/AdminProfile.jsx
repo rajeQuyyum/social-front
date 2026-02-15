@@ -148,7 +148,7 @@ export default function AdminProfile() {
 
       <h2 className="text-xl mb-4 font-semibold">Images</h2>
 
-      <div className="grid grid-cols-3 gap-8">
+      <div className="md:grid grid-cols-3 flex-col gap-8">
         <div>
           <p>Profile Image</p>
           {profile.profileImage && (
