@@ -108,6 +108,20 @@ export default function AdminDM() {
       {/* BASIC INFO */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <input name="dmName" value={data.dmName || ""} onChange={handleChange} placeholder="DM Name" className="input" />
+        <div className="flex items-center gap-2">
+  <input
+    type="checkbox"
+    checked={data.isVerified || false}
+    onChange={(e) =>
+      setData({
+        ...data,
+        isVerified: e.target.checked
+      })
+    }
+  />
+  <label>Verified Account</label>
+</div>
+
         <input name="dmUsername" value={data.dmUsername || ""} onChange={handleChange} placeholder="DM Username" className="input" />
         <input name="dmFollowers" value={data.dmFollowers || ""} onChange={handleChange} placeholder="Followers" className="input" />
         <input name="dmPosts" value={data.dmPosts || ""} onChange={handleChange} placeholder="Posts" className="input" />

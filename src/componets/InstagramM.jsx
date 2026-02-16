@@ -6,6 +6,7 @@ import { CiImageOn, CiVideoOn } from "react-icons/ci";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { IoCallOutline, IoChevronBack, IoMicOutline } from "react-icons/io5";
 import { MdCameraAlt } from "react-icons/md";
+import { PiSealCheckFill } from "react-icons/pi";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -59,7 +60,7 @@ export default function InstagramM() {
     <section className="w-112.5 m-auto bg-black min-h-screen">
 
       {/* HEADER */}
-      <div className="border-b flex items-center gap-4 p-4">
+      <div className="border-b flex items-center gap-4 p-4 ">
         <IoChevronBack className="text-white text-2xl" />
 
         {data.dmProfileImage && (
@@ -71,7 +72,14 @@ export default function InstagramM() {
         )}
 
         <div className="flex flex-col">
-          <h1 className="text-white">{data.dmName}</h1>
+          <div className="flex items-center gap-1">
+  <h1 className="text-white">{data.dmName}</h1>
+
+  {data.isVerified && (
+    <PiSealCheckFill className="text-blue-500 text-lg" />
+  )}
+</div>
+
           <h2 className="text-sm text-gray-500">{data.dmUsername}</h2>
         </div>
 
@@ -89,7 +97,14 @@ export default function InstagramM() {
           />
         )}
 
-        <h1 className="text-white mt-2">{data.dmName}</h1>
+        <div className="flex items-center gap-1 mt-2">
+  <h1 className="text-white">{data.dmName}</h1>
+
+  {data.isVerified && (
+    <PiSealCheckFill className="text-blue-500 text-lg" />
+  )}
+</div>
+
         <h2 className="text-gray-500 text-sm">{data.dmUsername}</h2>
 
         <h1 className="text-gray-500 text-sm">
