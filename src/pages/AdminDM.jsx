@@ -119,36 +119,101 @@ export default function AdminDM() {
       {/* MESSAGES SECTION */}
       <h2 className="text-xl mb-4">Messages</h2>
 
-      {data.messages?.map((msg, index) => (
-        <div key={index} className="flex gap-2 mb-4">
-          <input
-            value={msg.text || ""}
-            onChange={(e) => {
-              const updated = [...data.messages];
-              updated[index].text = e.target.value;
-              setData({ ...data, messages: updated });
-            }}
-            className="input flex-1"
-          />
+     {data.messages?.map((msg, index) => (
+  <div key={index} className="mb-6">
 
-          <button
-            className="bg-red-600 px-3 rounded"
-            onClick={() => {
-              const updated = data.messages.filter((_, i) => i !== index);
-              setData({ ...data, messages: updated });
-            }}
-          >
-            Delete
-          </button>
+    {/* PREVIEW (matches InstagramM exactly) */}
+    <div
+      className={`flex mb-3 ${
+        msg.sender === "right" ? "justify-start" : "justify-end"
+      }`}
+    >
+      {/* LEFT SIDE (With Image) */}
+      {msg.sender === "right" && data.dmProfileImage && (
+        <img
+          className="h-8 w-8 rounded-full mr-2"
+          src={data.dmProfileImage}
+          alt=""
+        />
+      )}
+
+      <div className="max-w-xs">
+        {msg.image && (
+          <img
+            src={msg.image}
+            className="rounded-lg mb-2"
+            alt=""
+          />
+        )}
+
+        <div
+          className={`py-2 px-4 rounded-2xl text-sm ${
+            msg.sender === "right"
+              ? "bg-gray-800 text-white"
+              : "bg-blue-600 text-white"
+          }`}
+        >
+          {msg.text || "Message preview..."}
         </div>
-      ))}
+      </div>
+    </div>
+
+    {/* EDIT PANEL (ALWAYS visible for both sides) */}
+    <div className="border border-gray-700 p-4 rounded space-y-3">
+
+      {/* TEXT EDIT */}
+      <input
+        value={msg.text || ""}
+        onChange={(e) => {
+          const updated = [...data.messages];
+          updated[index].text = e.target.value;
+          setData({ ...data, messages: updated });
+        }}
+        placeholder="Edit message text"
+        className="input w-full"
+      />
+
+      {/* SIDE SELECT */}
+      <select
+        value={msg.sender || "left"}
+        onChange={(e) => {
+          const updated = [...data.messages];
+          updated[index].sender = e.target.value;
+          setData({ ...data, messages: updated });
+        }}
+        className="input w-full"
+      >
+        <option value="right">Left Side (With Image)</option>
+        <option value="left">Right Side (No Image)</option>
+      </select>
+
+      {/* DELETE BUTTON */}
+      <button
+        className="bg-red-600 px-4 py-1 rounded"
+        onClick={() => {
+          const updated = data.messages.filter((_, i) => i !== index);
+          setData({ ...data, messages: updated });
+        }}
+      >
+        Delete Message
+      </button>
+
+    </div>
+  </div>
+))}
+
+
 
       <button
         className="bg-gray-700 px-4 py-2 rounded mb-6"
         onClick={() =>
           setData({
             ...data,
-            messages: [...(data.messages || []), { text: "" }]
+           messages: [
+  ...(data.messages || []),
+  { text: "", sender: "left", image: "" }
+]
+
           })
         }
       >

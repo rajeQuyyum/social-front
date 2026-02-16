@@ -106,22 +106,47 @@ export default function InstagramM() {
       </div>
 
       {/* MESSAGES */}
-      <div className="px-4 mt-8">
-        {data.messages?.map((msg, index) => (
-          <div key={index} className="flex gap-2 mb-6">
-            {data.dmProfileImage && (
-              <img
-                className="h-8.75 w-8.75 rounded-full"
-                src={data.dmProfileImage}
-                alt=""
-              />
-            )}
-            <h1 className="text-white bg-gray-800 py-1 px-3 rounded-md">
-              {msg.text}
-            </h1>
-          </div>
-        ))}
+<div className="px-4 mt-8">
+  {data.messages?.map((msg, index) => (
+    <div
+      key={index}
+      className={`flex mb-6 ${
+        msg.sender === "right" ? "justify-start" : "justify-end"
+      }`}
+    >
+      {/* LEFT SIDE (Blue + Image) */}
+      {msg.sender === "right" && data.dmProfileImage && (
+        <img
+          className="h-9 w-9 rounded-full mr-2"
+          src={data.dmProfileImage}
+          alt=""
+        />
+      )}
+
+      <div className="max-w-xs">
+        {msg.image && (
+          <img
+            src={msg.image}
+            className="rounded-lg mb-2"
+            alt=""
+          />
+        )}
+
+        <h1
+          className={`py-2 px-4 rounded-2xl text-sm ${
+            msg.sender === "right"
+              ? "bg-gray-800 text-white"   // BLUE ON LEFT
+              : "bg-blue-600 text-white"  // GRAY ON RIGHT
+          }`}
+        >
+          {msg.text}
+        </h1>
       </div>
+    </div>
+  ))}
+</div>
+
+
 
       {/* INPUT */}
       <div className="bg-gray-800 flex items-center rounded-xl mt-80 p-2">
