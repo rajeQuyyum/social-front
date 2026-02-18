@@ -54,7 +54,7 @@ export default function InstagramM() {
   };
 
   return (
-    <section className="w-112.5 m-auto bg-black min-h-screen relative">
+    <section className="md:w-112.5 w-full m-auto bg-black min-h-screen relative">
 
       {/* ✅ FIXED HEADER */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-112.5 bg-black border-b flex items-center gap-4 p-4 z-50">
@@ -106,7 +106,7 @@ export default function InstagramM() {
         </div>
 
         {/* ✅ MESSAGES (add bottom padding so it won't hide under fixed input) */}
-        <div className="px-4 mt-8 pb-24">
+        <div className=" mt-8 pb-24">
           {data.messages?.map((msg, index) => (
             <div
               key={index}
@@ -115,7 +115,7 @@ export default function InstagramM() {
               }`}
             >
               {msg.sender === "right" && data.dmProfileImage && (
-                <img className="h-9 w-9 rounded-full mr-2" src={data.dmProfileImage} alt="" />
+                <img className="h-9 w-9 rounded-full mr-1" src={data.dmProfileImage} alt="" />
               )}
 
               <div className="max-w-xs">
@@ -137,7 +137,7 @@ export default function InstagramM() {
       </div>
 
       {/* ✅ FIXED INPUT */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-112.5 bg-black p-3">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-100 bg-black p-3">
         <div className="bg-gray-800 flex items-center rounded-xl p-2">
           <MdCameraAlt className="text-black bg-white rounded-full w-8 h-8 px-2" />
           <input
