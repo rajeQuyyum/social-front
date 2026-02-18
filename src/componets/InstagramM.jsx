@@ -10,9 +10,7 @@ import { PiSealCheckFill } from "react-icons/pi";
 
 const API = import.meta.env.VITE_API_URL;
 
-
 export default function InstagramM() {
-
   const emptyData = {
     dmProfileImage: "",
     dmName: "",
@@ -21,20 +19,20 @@ export default function InstagramM() {
     dmPosts: "",
     dmFollowsText: "",
     dmMutualText: "",
-     dmFollowsText2: "",
+    dmFollowsText2: "",
+    isVerified: false,
     messages: []
   };
 
   const [data, setData] = useState(emptyData);
 
   useEffect(() => {
-
     if (!socket.connected) socket.connect();
 
     fetchData();
 
     socket.on("profileUpdated", (updated) => {
-      setData(prev => ({
+      setData((prev) => ({
         ...prev,
         ...updated
       }));
@@ -43,13 +41,12 @@ export default function InstagramM() {
     return () => {
       socket.off("profileUpdated");
     };
-
   }, []);
 
   const fetchData = async () => {
     const res = await axios.get(`${API}/api/profile`);
     if (res.data) {
-      setData(prev => ({
+      setData((prev) => ({
         ...prev,
         ...res.data
       }));
@@ -57,29 +54,21 @@ export default function InstagramM() {
   };
 
   return (
-    <section className="w-112.5 m-auto bg-black min-h-screen">
+    <section className="w-112.5 m-auto bg-black min-h-screen relative">
 
-      {/* HEADER */}
-      <div className="border-b flex items-center gap-4 p-4 ">
+      {/* ✅ FIXED HEADER */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-112.5 bg-black border-b flex items-center gap-4 p-4 z-50">
         <IoChevronBack className="text-white text-2xl" />
 
         {data.dmProfileImage && (
-          <img
-            className="h-10 w-10 rounded-full"
-            src={data.dmProfileImage}
-            alt=""
-          />
+          <img className="h-10 w-10 rounded-full" src={data.dmProfileImage} alt="" />
         )}
 
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
-  <h1 className="text-white">{data.dmName}</h1>
-
-  {data.isVerified && (
-    <PiSealCheckFill className="text-blue-500 text-lg" />
-  )}
-</div>
-
+            <h1 className="text-white">{data.dmName}</h1>
+            {data.isVerified && <PiSealCheckFill className="text-blue-500 text-lg" />}
+          </div>
           <h2 className="text-sm text-gray-500">{data.dmUsername}</h2>
         </div>
 
@@ -87,92 +76,78 @@ export default function InstagramM() {
         <CiVideoOn className="text-white text-2xl" />
       </div>
 
-      {/* PROFILE SECTION */}
-      <div className="flex flex-col items-center mt-6 w-87.5 m-auto justify-center">
-        {data.dmProfileImage && (
-          <img
-            className="h-15 w-15 rounded-full"
-            src={data.dmProfileImage}
-            alt=""
-          />
-        )}
+      {/* ✅ SPACE FOR FIXED HEADER */}
+      <div className="pt-20">
 
-        <div className="flex items-center gap-1 mt-2">
-  <h1 className="text-white">{data.dmName}</h1>
+        {/* PROFILE SECTION */}
+        <div className="flex flex-col items-center mt-6 w-87.5 m-auto justify-center">
+          {data.dmProfileImage && (
+            <img className="h-15 w-15 rounded-full" src={data.dmProfileImage} alt="" />
+          )}
 
-  {data.isVerified && (
-    <PiSealCheckFill className="text-blue-500 text-lg" />
-  )}
-</div>
+          <div className="flex items-center gap-1 mt-2">
+            <h1 className="text-white">{data.dmName}</h1>
+            {data.isVerified && <PiSealCheckFill className="text-blue-500 text-lg" />}
+          </div>
 
-        <h2 className="text-gray-500 text-sm">{data.dmUsername}</h2>
+          <h2 className="text-gray-500 text-sm">{data.dmUsername}</h2>
 
-        <h1 className="text-gray-500 text-sm">
-          {data.dmFollowers} followers · {data.dmPosts} posts
-        </h1>
+          <h1 className="text-gray-500 text-sm">
+            {data.dmFollowers} followers · {data.dmPosts} posts
+          </h1>
 
-        <h1 className="text-gray-500 text-sm">{data.dmFollowsText}</h1>
-            <h1 className="text-gray-500 text-sm">{data.dmFollowsText2}</h1>
-        <h1 className="text-gray-500 text-sm">{data.dmMutualText}</h1>
+          <h1 className="text-gray-500 text-sm">{data.dmFollowsText}</h1>
+          <h1 className="text-gray-500 text-sm">{data.dmFollowsText2}</h1>
+          <h1 className="text-gray-500 text-sm">{data.dmMutualText}</h1>
 
-        <h1 className="text-white bg-gray-900 py-1.5 rounded-md px-3 mt-2">
-          View profile
-        </h1>
+          <h1 className="text-white bg-gray-900 py-1.5 rounded-md px-3 mt-2">
+            View profile
+          </h1>
+        </div>
+
+        {/* ✅ MESSAGES (add bottom padding so it won't hide under fixed input) */}
+        <div className="px-4 mt-8 pb-24">
+          {data.messages?.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex mb-6 ${
+                msg.sender === "right" ? "justify-start" : "justify-end"
+              }`}
+            >
+              {msg.sender === "right" && data.dmProfileImage && (
+                <img className="h-9 w-9 rounded-full mr-2" src={data.dmProfileImage} alt="" />
+              )}
+
+              <div className="max-w-xs">
+                {msg.image && <img src={msg.image} className="rounded-lg mb-2" alt="" />}
+
+                <h1
+                  className={`py-2 px-4 rounded-2xl text-sm ${
+                    msg.sender === "right"
+                      ? "bg-gray-800 text-white"
+                      : "bg-blue-600 text-white"
+                  }`}
+                >
+                  {msg.text}
+                </h1>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* MESSAGES */}
-<div className="px-4 mt-8">
-  {data.messages?.map((msg, index) => (
-    <div
-      key={index}
-      className={`flex mb-6 ${
-        msg.sender === "right" ? "justify-start" : "justify-end"
-      }`}
-    >
-      {/* LEFT SIDE (Blue + Image) */}
-      {msg.sender === "right" && data.dmProfileImage && (
-        <img
-          className="h-9 w-9 rounded-full mr-2"
-          src={data.dmProfileImage}
-          alt=""
-        />
-      )}
-
-      <div className="max-w-xs">
-        {msg.image && (
-          <img
-            src={msg.image}
-            className="rounded-lg mb-2"
-            alt=""
+      {/* ✅ FIXED INPUT */}
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-112.5 bg-black p-3">
+        <div className="bg-gray-800 flex items-center rounded-xl p-2">
+          <MdCameraAlt className="text-black bg-white rounded-full w-8 h-8 px-2" />
+          <input
+            className="bg-transparent text-white outline-none px-2 flex-1"
+            placeholder="Message..."
           />
-        )}
-
-        <h1
-          className={`py-2 px-4 rounded-2xl text-sm ${
-            msg.sender === "right"
-              ? "bg-gray-800 text-white"   // BLUE ON LEFT
-              : "bg-blue-600 text-white"  // GRAY ON RIGHT
-          }`}
-        >
-          {msg.text}
-        </h1>
-      </div>
-    </div>
-  ))}
-</div>
-
-
-
-      {/* INPUT */}
-      <div className="bg-gray-800 flex items-center rounded-xl mt-80 p-2">
-        <MdCameraAlt className="text-black bg-white rounded-full w-8 h-8 px-2" />
-        <input
-          className="bg-transparent text-white outline-none px-2 flex-1"
-          placeholder="Message..."
-        />
-        <IoMicOutline className="text-white text-2xl" />
-        <CiImageOn className="text-white text-2xl ml-2" />
-        <IoIosAddCircleOutline className="text-white text-xl ml-2" />
+          <IoMicOutline className="text-white text-2xl" />
+          <CiImageOn className="text-white text-2xl ml-2" />
+          <IoIosAddCircleOutline className="text-white text-xl ml-2" />
+        </div>
       </div>
 
     </section>
