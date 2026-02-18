@@ -1,0 +1,5 @@
+html, body, #root {
+  background-color: black;
+  min-height: 100%;
+  overflow-x: hidden;
+}
